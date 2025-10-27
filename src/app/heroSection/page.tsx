@@ -9,22 +9,62 @@ const HeroSection = () => {
     {
       image: "/i1.jpg",
       alt: "Pessoas trabalhando em segurança",
+      title: (
+        <>
+          Sua segurança começa com
+          <span className="block text-yellow-300">informação</span>
+        </>
+      ),
     },
     {
       image: "/i2.jpg",
       alt: "Proteção e segurança",
+      title: (
+        <>
+          Nem toda oportunidade é
+          <span className="block text-yellow-300">uma oportunidade real</span>
+        </>
+      ),
     },
     {
-      image: "i3.jpg",
+      image: "/i3.jpg",
       alt: "Comunidade unida",
+      title: (
+        <>
+          Proteja-se antes de
+          <span className="block text-yellow-300">ser tarde demais</span>
+        </>
+      ),
     },
     {
       image: "/i4.jpg",
       alt: "Apoio e solidariedade",
+      title: (
+        <>
+          Reconheça os sinais e
+          <span className="block text-yellow-300">salve uma vida</span>
+        </>
+      ),
     },
     {
       image: "/i5.jpg",
       alt: "Crescimento e esperança",
+      title: (
+        <>
+          Você tem o poder de
+          <span className="block text-yellow-300">dizer não ao tráfico</span>
+        </>
+      ),
+    },
+    {
+      image: "/i6.jpg",
+      alt: "Futuro brilhante",
+      title: (
+        <>
+          Promessas falsas destroem
+          <span className="block text-yellow-300">vidas reais</span>
+        </>
+      ),
     },
   ];
 
@@ -63,56 +103,21 @@ const HeroSection = () => {
               />
             </div>
           ))}
-          {/* Dark Overlay with Blur Effect */}
           <div className="absolute inset-0 from-indigo-900/85 via-indigo-800/85 to-purple-900/85 backdrop-blur-x"></div>
         </div>
 
-        {/* Content */}
+        {/* Text changing dynamically */}
         <div className="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
-          <div className="text-center max-w-4xl">
+          <div className="text-center max-w-4xl transition-opacity duration-700 ease-in-out">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Sua segurança começa com
-              <span className="block text-yellow-300">informação</span>
+              {slides[currentSlide].title}
             </h1>
-
-            {/* <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Nem toda oportunidade é
-              <span className="block text-yellow-300">uma oportunidade real</span>
-            </h1>
-
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-  Proteja-se antes de
-  <span className="block text-yellow-300">ser tarde demais</span>
-</h1>
-
-<h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-  Reconheça os sinais e
-  <span className="block text-yellow-300">salve uma vida</span>
-</h1>
-
-
-<h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-  Você tem o poder de
-  <span className="block text-yellow-300">dizer não ao tráfico</span>
-</h1>
-
-<h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-  Verifique antes de
-  <span className="block text-yellow-300">confiar</span>
-</h1>
-
-<h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-  Promessas falsas destroem
-  <span className="block text-yellow-300">vidas reais</span>
-</h1>
-
-            */}
 
             <button
               onClick={scrollToVerificador}
               className="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-50 transition-all shadow-2xl hover:shadow-xl hover:scale-105 transform"
             >
-              Verificar Link Agora
+              Denincie aqui
             </button>
           </div>
         </div>
@@ -135,7 +140,7 @@ const HeroSection = () => {
       </section>
 
       {/* Content Below Carousel */}
-      <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white py-16">
+      <section className="bg-linear-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Badge */}
