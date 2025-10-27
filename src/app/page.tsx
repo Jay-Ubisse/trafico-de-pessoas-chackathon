@@ -23,7 +23,7 @@ export default function Home() {
   const { messages, sendMessage } = useChat();
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center">
+    <div className="min-h-screen w-full flex items-center justify-center">
       <h1>Landing page</h1>
       <div className="fixed bottom-12 right-12">
         <Dialog>
@@ -41,7 +41,11 @@ export default function Home() {
               <div className="flex-1">
                 {messages.map((message) => (
                   <div key={message.id} className="whitespace-pre-wrap">
-                    {message.role === "user" ? <p className="font-semibold">Voce: </p> : <p className="font-semibold">Grupo 4 Chatbot: </p>}
+                    {message.role === "user" ? (
+                      <p className="font-semibold">Voce: </p>
+                    ) : (
+                      <p className="font-semibold">Grupo 4 Chatbot: </p>
+                    )}
                     {message.parts.map((part, i) => {
                       switch (part.type) {
                         case "text":
@@ -63,12 +67,12 @@ export default function Home() {
                   className="flex gap-2"
                 >
                   <Input
-                  className="w-80"
+                    className="w-80"
                     placeholder="Como podemos ajudar?"
                     onChange={(e) => setInput(e.currentTarget.value)}
                   />
                   <Button type="submit">
-                    <SendHorizonal className="size-4"/>
+                    <SendHorizonal className="size-4" />
                   </Button>
                 </form>
               </DialogFooter>
