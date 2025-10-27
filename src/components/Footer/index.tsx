@@ -1,12 +1,23 @@
 "use client";
-import React from 'react';
-import { Shield, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Heart, Linkedin, Youtube, Zap, MessageCircle } from 'lucide-react';
+import React from "react";
+import {
+  Shield,
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube,
+  MessageCircle,
+} from "lucide-react";
 
 const Footer = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -19,6 +30,12 @@ const Footer = () => {
             {/* Sobre SafeNet */}
             <div>
               <div className="flex items-center space-x-3 mb-4">
+                {/* <Image
+                  src="/Logo.png"
+                  alt="SafeNet Logo"
+                  width={120}
+                  height={120}
+                /> */}
                 <div className="bg-indigo-600 p-2 rounded-lg">
                   <Shield className="h-6 w-6" />
                 </div>
@@ -28,7 +45,9 @@ const Footer = () => {
                 </div>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Plataforma de prevenção e resposta ao tráfico de pessoas em Moçambique, usando tecnologia para educar, detectar e proteger comunidades vulneráveis.
+                Plataforma de prevenção e resposta ao tráfico de pessoas em
+                Moçambique, usando tecnologia para educar, detectar e proteger
+                comunidades vulneráveis.
               </p>
             </div>
             {/* Links Rápidos */}
@@ -36,27 +55,39 @@ const Footer = () => {
               <h4 className="text-lg font-semibold mb-4">Links Rápidos</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <button onClick={() => scrollToSection('verificador')} className="hover:underline">
+                  <button
+                    onClick={() => scrollToSection("verificador")}
+                    className="hover:underline"
+                  >
                     Verificador de Links
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollToSection('sobre')} className="hover:underline">
+                  <button
+                    onClick={() => scrollToSection("sobre")}
+                    className="hover:underline"
+                  >
                     Sobre Nós
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollToSection('recursos')} className="hover:underline">
+                  <button
+                    onClick={() => scrollToSection("recursos")}
+                    className="hover:underline"
+                  >
                     Recursos Educativos
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollToSection('contato')} className="hover:underline">
+                  <button
+                    onClick={() => scrollToSection("contato")}
+                    className="hover:underline"
+                  >
                     Contato
                   </button>
                 </li>
               </ul>
-            </div>  
+            </div>
             {/* Contato */}
             <div>
               <h4 className="text-lg font-semibold mb-4">Contato</h4>
@@ -67,7 +98,7 @@ const Footer = () => {
                 </li>
                 <li className="flex items-center space-x-2">
                   <Mail className="h-5 w-5 text-indigo-400" />
-                    <span>Safenet@gmail.com</span>
+                  <span>Safenet@gmail.com</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <MapPin className="h-5 w-5 text-indigo-400" />
@@ -103,11 +134,12 @@ const Footer = () => {
           </div>
 
           <div className="border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} SafeNet. Todos os direitos reservados.
+            &copy; {new Date().getFullYear()} SafeNet. Todos os direitos
+            reservados.
           </div>
         </div>
       </div>
     </footer>
   );
-}
+};
 export default Footer;
