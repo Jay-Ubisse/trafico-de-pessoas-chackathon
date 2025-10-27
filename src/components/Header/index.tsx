@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
-import { Menu, X, Shield, Phone } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import { Menu, X, Shield, Phone } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,7 +9,7 @@ export default function Header() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
       setIsMenuOpen(false);
     }
   };
@@ -35,15 +35,17 @@ export default function Header() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-indigo-600">SafeNet</h1>
-              <p className="text-xs text-gray-600">Protegendo Vidas, Criando Consciência</p>
+              <p className="text-xs text-gray-600">
+                Protegendo Vidas, Criando Consciência
+              </p>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link 
-              onClick={() => scrollToSection('home')}
-              href={"#"}
+            <Link
+              onClick={() => scrollToSection("home")}
+              href={"/"}
               className="hover:text-indigo-500 group relative text-gray-700 transition-colors font-medium"
             >
               <span className="relative z-10">Início</span>
@@ -54,9 +56,9 @@ export default function Header() {
               />
             </Link>
 
-            <Link 
-              onClick={() => scrollToSection('info')}
-              href={"/Ajuda"}
+            <Link
+              onClick={() => scrollToSection("info")}
+              href={"#"}
               className="hover:text-indigo-500 group relative text-gray-700 transition-colors font-medium"
             >
               <span className="relative z-10">Informações</span>
@@ -66,8 +68,8 @@ export default function Header() {
               />
             </Link>
 
-            <Link 
-              onClick={() => scrollToSection('verificador')}
+            <Link
+              onClick={() => scrollToSection("verificador")}
               href={"#"}
               className="hover:text-indigo-500 group relative text-gray-700 transition-colors font-medium"
             >
@@ -78,8 +80,8 @@ export default function Header() {
               />
             </Link>
 
-            <Link 
-              onClick={() => scrollToSection('contato')}
+            <Link
+              onClick={() => scrollToSection("contato")}
               href={"#"}
               className="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors font-medium"
             >
@@ -87,38 +89,42 @@ export default function Header() {
             </Link>
           </nav>
 
-          <button 
+          <button
             className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-6 h-6 hover:text-red-700 cursor-pointer" /> : <Menu className="w-6 h-6" />}
-          </button> 
+            {isMenuOpen ? (
+              <X className="w-6 h-6 hover:text-red-700 cursor-pointer" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
         </div>
 
         {/* Mobile Navigation */}
-         {isMenuOpen && (
+        {isMenuOpen && (
           <nav className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4">
-              <button 
-                onClick={() => scrollToSection('home')}
+              <button
+                onClick={() => scrollToSection("home")}
                 className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-left"
               >
                 Início
               </button>
-              <button 
-                onClick={() => scrollToSection('info')}
+              <button
+                onClick={() => scrollToSection("info")}
                 className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-left"
               >
                 Informações
               </button>
-              <button 
-                onClick={() => scrollToSection('verificador')}
+              <button
+                onClick={() => scrollToSection("verificador")}
                 className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-left"
               >
                 Verificar Link
               </button>
-              <button 
-                onClick={() => scrollToSection('contato')}
+              <button
+                onClick={() => scrollToSection("contato")}
                 className="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors font-medium"
               >
                 Denunciar
@@ -126,7 +132,7 @@ export default function Header() {
             </div>
           </nav>
         )}
-      </div> 
+      </div>
 
       {/* Emergency Banner */}
       <div className="bg-red-600 text-white py-2">
@@ -134,14 +140,12 @@ export default function Header() {
           <div className="flex items-center justify-center space-x-2 text-sm">
             <Phone className="w-4 h-4" />
             <span className="font-medium">Emergência? Linha de Apoio 24h:</span>
-            <a href="tel:1400" className="underline font-bold">1400</a>
+            <a href="tel:1400" className="underline font-bold">
+              1400
+            </a>
           </div>
         </div>
       </div>
     </header>
   );
 }
-
-
-
-
