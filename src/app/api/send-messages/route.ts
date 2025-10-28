@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { sentMessagesSchema } from "@/schemas/messages";
+import { MessageProps } from "@/types/messages";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -15,6 +15,36 @@ export async function GET() {
     );
   }
 }
+
+/*Cadastrar vários campos */
+
+export async function POST(req: Request) {
+  try {
+    const body: MessageProps[] = await req.json();
+
+    await prisma.sentMessages.createMany({
+      data: body,
+    });
+
+    return NextResponse.json(
+      {
+        message: "Mensagens enviadas com sucesso",
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Erro interno no servidor", error },
+      { status: 500 }
+    );
+  }
+}
+
+/*
+
+Cadastrar um campo
+
 
 export async function POST(req: Request) {
   try {
@@ -45,3 +75,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
+*/

@@ -25,13 +25,15 @@ export function NavMain({
       <SidebarMenu>
         <ul className="text-base flex flex-col gap-4 pl-4 mt-5">
           {items.map((item) => (
-            <Link
-              key={item.title}
-              href={item.url}
-              className="rounded-md hover:bg-gray-200 px-2 py-1"
-            >
-              {item.title}
-            </Link>
+            <div className="flex items-center" key={item.title}>
+              {item.icon && <item.icon />}
+              <Link
+                href={item.url}
+                className="rounded-md hover:bg-gray-200 px-2 py-1"
+              >
+                {item.title}
+              </Link>
+            </div>
           ))}
         </ul>
       </SidebarMenu>
