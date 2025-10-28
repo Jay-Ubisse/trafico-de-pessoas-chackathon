@@ -13,7 +13,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 
-const Footer = () => {
+export const Footer = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -142,4 +142,3 @@ const Footer = () => {
     </footer>
   );
 };
-export default Footer;
