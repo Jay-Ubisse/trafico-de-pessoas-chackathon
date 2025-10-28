@@ -1,4 +1,5 @@
 import { AllMessagesTable } from "@/components/tables/all-messages-table";
+import { AllVulnerableTable } from "@/components/tables/all-messages-table/all-vunerable-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UploadNumbersSheet } from "@/components/upload-numbers-sheet";
 
@@ -18,7 +19,12 @@ export default function Messages() {
         </div>
       </TabsContent>
       <TabsContent value="vulnerable">
-        Tabela de pessoas vulneráveis aqui
+        <div className="mt-4 flex justify-end">
+          <UploadNumbersSheet />
+        </div>
+        <div>
+          <AllVulnerableTable/>
+        </div>
       </TabsContent>
     </Tabs>
   );
