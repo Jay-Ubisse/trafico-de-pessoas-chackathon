@@ -1,13 +1,13 @@
-import { openai, createOpenAI } from '@ai-sdk/openai';
-import { streamText, UIMessage, convertToModelMessages } from 'ai';
+import { openai, createOpenAI } from "@ai-sdk/openai";
+import { streamText, UIMessage, convertToModelMessages } from "ai";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 const lmstudio = createOpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL: "http://127.0.0.1:1234/v1"
-})
+  apiKey: "shghjdjk",
+  baseURL: "http://127.0.0.1:1234/v1",
+});
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
@@ -22,8 +22,8 @@ export async function POST(req: Request) {
         - Only answer questions related to human trafficking and violence.
         - If the user enters a text whose content differs from these topics, tell them that you were created solely to answer questions about human trafficking and violence.
         - Regardless of the language of the text entered, always answer in Portuguese.
-    `
+    `,
   });
-  console.log(result)
+  console.log(result);
   return result.toUIMessageStreamResponse();
 }
