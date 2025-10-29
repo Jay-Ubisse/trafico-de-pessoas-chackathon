@@ -24,3 +24,48 @@ model SentMessages {
 
   @@map("sent_messages")
 }
+
+model Complaints {
+  id        String   @id @default(uuid())
+  name      String?
+  means     String
+  purpose   String
+  number    String?
+  location  String
+  action    String
+  gender    String
+  ageGroup  String
+  status    Status   @default(Em_Curso)
+  createdAt DateTime @default(now())
+
+  @@map("complaints")
+}
+
+enum Status {
+  Em_Curso
+  Resolvido
+  Não_Resolvido
+}
+
+model VulnerablePeople {
+  id                      String @id @default(uuid())
+  number                  String @unique
+  name                    String
+  ageGroup                String
+  gender                  String
+  location                String
+  childTraffickingScore   Float
+  domesticServitudeScore  Float
+  drugsCoercionScore      Float
+  forcedLaborScore        Float
+  fraudDeceptionScore     Float
+  organTraffickingScore   Float
+  sexualExploitationScore Float
+  totalVulnerabilityScore Float
+  vulnerabilityLevel      String
+  vulnerabilityType       String
+
+  createdAt DateTime @default(now())
+
+  @@map("vulnerable_people")
+}

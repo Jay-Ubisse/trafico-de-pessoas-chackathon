@@ -20,124 +20,182 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
+import { registerVulnerablePerson } from "@/services/vulnerable";
 
 // ------------------ SCHEMA ------------------
-
 const formSchema = z.object({
   name: z.string().min(2, "Nome obrigatório"),
   number: z.string().min(8, "Número inválido"),
   location: z.string().min(2, "Local obrigatório"),
-  ageGroup: z.string(),
-  question1: z.string(),
-  question2: z.string(),
-  question3: z.string(),
-  question4: z.string(),
-  question5: z.string(),
-  question6: z.string(),
-  question7: z.string(),
-  question8: z.string(),
-  question9: z.string(),
-  question10: z.string(),
+  ageGroup: z.string().min(1, "Faixa etária obrigatória"),
+  gender: z.string().min(1, '"Gênero obrigatório"'),
+
+  question1: z.string().min(1, "Resposta obrigatória"),
+  question2: z.string().min(1, "Resposta obrigatória"),
+  question3: z.string().min(1, "Resposta obrigatória"),
+  question4: z.string().min(1, "Resposta obrigatória"),
+  question5: z.string().min(1, "Resposta obrigatória"),
+  question6: z.string().min(1, "Resposta obrigatória"),
+  question7: z.string().min(1, "Resposta obrigatória"),
+  question8: z.string().min(1, "Resposta obrigatória"),
+  question9: z.string().min(1, "Resposta obrigatória"),
+  question10: z.string().min(1, "Resposta obrigatória"),
+  question11: z.string().min(1, "Resposta obrigatória"),
+  question12: z.string().min(1, "Resposta obrigatória"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-// ------------------ PROCESSAMENTO ------------------
-
-/*
-🧠 Lógica aplicada
-
-- Cada resposta “Sim” adiciona 2 pontos, “Às vezes” adiciona 1 ponto, “Não” adiciona 0.
-- O nível final (Baixo, Médio, Alto) é determinado pela soma.
-- O tipo de vulnerabilidade (Prostituição, Trabalho Forçado, Drogas) é inferido com base em padrões de resposta:
-    - Se a pessoa aceita alojamento e transporte sem contrato → Trabalho Forçado
-    - Se aceita propostas informais e deslocações → Prostituição
-    - Se aceita coordenar pagamento por terceiros → Drogas (usado como tipo de exploração ilícita / tráfico associado)
-*/
+// ------------------ TIPOS ------------------
+type VulnerabilityCategory =
+  | "Trabalho Forçado"
+  | "Exploração Sexual"
+  | "Servidão Doméstica"
+  | "Tráfico de Órgãos"
+  | "Tráfico de Crianças"
+  | "Fraude/Engano"
+  | "Drogas/Coerção";
 
 type VulnerabilityResult = {
   number: string;
   name: string;
+  ageGroup: string;
   location: string;
-  vulnerabilityType: "Prostituição" | "Trabalho Forçado" | "Drogas";
-  vulnerabilityLevel: "Baixo" | "Médio" | "Alto";
+  gender: string;
+  vulnerabilityType: VulnerabilityCategory | "Nenhuma";
+  vulnerabilityLeve: "Baixo" | "Médio" | "Alto" | "Crítico";
+  scoreBreakdown: Record<string, number>; // nomes sem espaços e em inglês
+  totalVulnerabilityPct: number;
 };
 
+// ------------------ FUNÇÃO DE PROCESSAMENTO ------------------
 function processFormData(values: FormValues): VulnerabilityResult {
-  const scoreMap: Record<string, number> = {
-    Sim: 2,
-    "Às vezes": 1,
-    Não: 0,
-  };
+  const responseValue: Record<string, number> = { Sim: 2, Talvez: 1, Não: 0 };
 
-  const riskPatterns = {
-    Prostituição: ["question3", "question6", "question9"],
-    "Trabalho Forçado": ["question2", "question5", "question8"],
-    Drogas: ["question4", "question7", "question10"],
-  };
+  const categories: VulnerabilityCategory[] = [
+    "Exploração Sexual",
+    "Trabalho Forçado",
+    "Servidão Doméstica",
+    "Tráfico de Órgãos",
+    "Tráfico de Crianças",
+    "Fraude/Engano",
+    "Drogas/Coerção",
+  ];
 
-  const typeScores = {
-    Prostituição: 0,
-    "Trabalho Forçado": 0,
-    Drogas: 0,
-  };
+  const weights = {
+    question1: { "Fraude/Engano": 1.5, "Trabalho Forçado": 1.0 },
+    question2: {
+      "Trabalho Forçado": 2.0,
+      "Fraude/Engano": 1.0,
+      "Exploração Sexual": 1.0,
+    },
+    question3: { "Fraude/Engano": 2.0, "Exploração Sexual": 1.5 },
+    question4: { "Fraude/Engano": 1.5, "Trabalho Forçado": 1.0 },
+    question5: { "Trabalho Forçado": 2.0, "Servidão Doméstica": 1.5 },
+    question6: { "Fraude/Engano": 2.0, "Tráfico de Crianças": 1.0 },
+    question7: { "Fraude/Engano": 1.5, "Exploração Sexual": 1.0 },
+    question8: {
+      "Trabalho Forçado": 1.5,
+      "Servidão Doméstica": 1.5,
+      "Exploração Sexual": 1.0,
+    },
+    question9: { "Fraude/Engano": 1.5 },
+    question10: { "Fraude/Engano": 2.0, "Drogas/Coerção": 1.5 },
+    question11: { "Tráfico de Órgãos": 2.0, "Drogas/Coerção": 1.0 },
+    question12: {
+      "Trabalho Forçado": 2.0,
+      "Exploração Sexual": 1.5,
+      "Fraude/Engano": 1.5,
+    },
+  } as const;
 
-  for (const [type, keys] of Object.entries(riskPatterns)) {
-    for (const key of keys) {
-      const response = values[key as keyof FormValues];
-      typeScores[type as keyof typeof typeScores] += scoreMap[response] || 0;
+  const categoryScore = Object.fromEntries(
+    categories.map((cat) => [cat, 0])
+  ) as Record<VulnerabilityCategory, number>;
+
+  const categoryMax = Object.fromEntries(
+    categories.map((cat) => [cat, 0])
+  ) as Record<VulnerabilityCategory, number>;
+
+  for (const [q, mapping] of Object.entries(weights)) {
+    const resp = values[q as keyof FormValues] as keyof typeof responseValue;
+    const val = responseValue[resp] ?? 0;
+
+    for (const [cat, weight] of Object.entries(mapping) as [
+      VulnerabilityCategory,
+      number
+    ][]) {
+      categoryScore[cat] += val * weight;
+      categoryMax[cat] += 2 * weight;
     }
   }
 
-  const highestType = Object.entries(typeScores).sort(
-    (a, b) => b[1] - a[1]
-  )[0][0] as "Prostituição" | "Trabalho Forçado" | "Drogas";
+  // Fatores demográficos
+  if (values.ageGroup === "below18") {
+    categoryScore["Tráfico de Crianças"] += 5;
+    categoryScore["Trabalho Forçado"] += 2;
+    categoryMax["Tráfico de Crianças"] += 5;
+    categoryMax["Trabalho Forçado"] += 2;
+  }
 
-  const totalScore = Object.values(typeScores).reduce((a, b) => a + b, 0);
-  let vulnerabilityLevel: VulnerabilityResult["vulnerabilityLevel"];
+  if (values.gender === "Feminino") {
+    categoryScore["Exploração Sexual"] += 3;
+    categoryScore["Servidão Doméstica"] += 2;
+    categoryMax["Exploração Sexual"] += 3;
+    categoryMax["Servidão Doméstica"] += 2;
+  }
 
-  if (totalScore <= 4) vulnerabilityLevel = "Baixo";
-  else if (totalScore <= 8) vulnerabilityLevel = "Médio";
-  else vulnerabilityLevel = "Alto";
+  const categoryPct: Record<VulnerabilityCategory, number> = {} as any;
+  for (const cat of categories) {
+    const max = categoryMax[cat] || 1;
+    categoryPct[cat] = Math.min(100, (categoryScore[cat] / max) * 100);
+  }
+
+  const sortedCats = Object.entries(categoryPct).sort(([, a], [, b]) => b - a);
+  const [topCat, topPct] = sortedCats[0];
+  const vulnerabilityType =
+    topPct < 25 ? "Nenhuma" : (topCat as VulnerabilityCategory);
+
+  const totalScore = Object.values(categoryScore).reduce((a, b) => a + b, 0);
+  const totalMax = Object.values(categoryMax).reduce((a, b) => a + b, 0) || 1;
+  const totalPct = Math.min(100, (totalScore / totalMax) * 100);
+
+  let vulnerabilityLeve: VulnerabilityResult["vulnerabilityLeve"];
+  if (totalPct < 25) vulnerabilityLeve = "Baixo";
+  else if (totalPct < 50) vulnerabilityLeve = "Médio";
+  else if (totalPct < 75) vulnerabilityLeve = "Alto";
+  else vulnerabilityLeve = "Crítico";
+
+  // Converter chaves para inglês e sem espaços
+  const scoreBreakdown = Object.fromEntries(
+    Object.entries(categoryPct).map(([key, value]) => [
+      key.replace(/\s+/g, "_").replace(/[^\w]/g, ""),
+      value,
+    ])
+  );
 
   return {
-    name: values.name,
     number: values.number,
+    name: values.name,
     location: values.location,
-    vulnerabilityType: highestType,
-    vulnerabilityLevel,
+    gender: values.gender,
+    ageGroup: values.ageGroup,
+    vulnerabilityType,
+    vulnerabilityLeve,
+    scoreBreakdown,
+    totalVulnerabilityPct: totalPct,
   };
 }
 
 // ------------------ COMPONENTE PRINCIPAL ------------------
-
 export default function SafenetForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      number: "",
-      location: "",
-      ageGroup: "",
-      question1: "",
-      question2: "",
-      question3: "",
-      question4: "",
-      question5: "",
-      question6: "",
-      question7: "",
-      question8: "",
-      question9: "",
-      question10: "",
-    },
   });
 
   const questions = [
-    {
-      name: "question1",
-      label:
-        "Está atualmente à procura de oportunidades de emprego fora da sua cidade?",
-    },
+    { name: "question1", label: "Está à procura de emprego fora da cidade?" },
     {
       name: "question2",
       label:
@@ -145,31 +203,27 @@ export default function SafenetForm() {
     },
     {
       name: "question3",
-      label: "Já recebeu alguma proposta de trabalho através de redes sociais?",
+      label: "Já recebeu proposta de trabalho via redes sociais?",
     },
     {
       name: "question4",
-      label:
-        "Conhece alguém que possa ajudá-lo(a) a conseguir emprego fora do país?",
+      label: "Conhece alguém que poderia ajudá-lo(a) a trabalhar fora do país?",
     },
     {
       name: "question5",
-      label:
-        "Estaria disposto(a) a trabalhar sem contrato formal nos primeiros meses?",
+      label: "Trabalharia sem contrato formal nos primeiros meses?",
     },
     {
       name: "question6",
-      label:
-        "Já lhe pediram para enviar documentos pessoais para uma proposta de emprego?",
+      label: "Já lhe pediram documentos pessoais para uma proposta de emprego?",
     },
     {
       name: "question7",
-      label:
-        "Alguma vez considerou aceitar uma oferta de emprego que parecesse boa demais?",
+      label: "Aceitaria uma oferta de emprego que parecesse boa demais?",
     },
     {
       name: "question8",
-      label: "Estaria disposto(a) a deixar seus familiares por um bom salário?",
+      label: "Deixaria seus familiares por um bom salário?",
     },
     {
       name: "question9",
@@ -177,70 +231,96 @@ export default function SafenetForm() {
     },
     {
       name: "question10",
+      label: "Confiaria em desconhecidos que prometem oportunidades rápidas?",
+    },
+    {
+      name: "question11",
       label:
-        "Confiaria em desconhecidos que prometem oportunidades rápidas de emprego?",
+        "Você tem dívidas urgentes ou problemas de saúde que te fariam aceitar ajuda de estranhos?",
+    },
+    {
+      name: "question12",
+      label:
+        "Já foi convidado(a) a participar de atividades remuneradas sem clareza do contrato?",
     },
   ];
 
-  function onSubmit(values: FormValues) {
-    const result = processFormData(values);
-    console.log("Respostas do Formulário:", values);
-    console.log("Resultado de Vulnerabilidade:", result);
-  }
-
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-2xl">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-2xl mt-28">
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Formulário de Candidatura — Programa de Emprego
       </h2>
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Nome */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome completo</FormLabel>
-                <FormControl>
-                  <Input placeholder="Digite o seu nome" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form
+          onSubmit={form.handleSubmit(async (values) => {
+            const result = processFormData(values);
+            toast.loading("A submeter formulário....");
+            const response = await registerVulnerablePerson({
+              data: {
+                ageGroup: result.ageGroup,
+                childTraffickingScore: result.scoreBreakdown.Trfico_de_Crianas,
+                domesticServitudeScore: result.scoreBreakdown.Servido_Domstica,
+                drugsCoercionScore: result.scoreBreakdown.DrogasCoero,
+                forcedLaborScore: result.scoreBreakdown.Trabalho_Forado,
+                fraudDeceptionScore: result.scoreBreakdown.Trabalho_Forado,
+                gender: result.gender,
+                location: result.location,
+                name: result.name,
+                number: result.number,
+                organTraffickingScore: result.scoreBreakdown.Trfico_de_rgos,
+                sexualExploitationScore: result.scoreBreakdown.Explorao_Sexual,
+                totalVulnerabilityScore: result.totalVulnerabilityPct,
+                vulnerabilityLevel: result.vulnerabilityLeve,
+                vulnerabilityType: result.vulnerabilityType,
+              },
+            });
 
-          {/* Número */}
-          <FormField
-            control={form.control}
-            name="number"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Número de celular</FormLabel>
-                <FormControl>
-                  <Input placeholder="84XXXXXXX" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            if (response?.status === 201) {
+              toast.dismiss();
+              toast.success(response.data.message);
+              form.reset();
+            } else {
+              toast.dismiss();
+              toast.error(response.data.message);
+            }
+          })}
+          className="space-y-6"
+        >
+          {/* Campos básicos */}
+          {["name", "number", "location"].map((field) => (
+            <FormField
+              key={field}
+              control={form.control}
+              name={field as keyof FormValues}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {field.name === "name"
+                      ? "Nome completo"
+                      : field.name === "number"
+                      ? "Número de celular"
+                      : "Local"}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={
+                        field.name === "name"
+                          ? "Digite seu nome"
+                          : field.name === "number"
+                          ? "84XXXXXXX"
+                          : "Cidade ou Distrito"
+                      }
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
 
-          {/* Local */}
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Local</FormLabel>
-                <FormControl>
-                  <Input placeholder="Cidade ou Distrito" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Faixa etária */}
+          {/* Faixa Etária */}
           <FormField
             control={form.control}
             name="ageGroup"
@@ -268,6 +348,33 @@ export default function SafenetForm() {
             )}
           />
 
+          {/* Gênero */}
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gênero</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione seu gênero" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Masculino">Masculino</SelectItem>
+                    <SelectItem value="Feminino">Feminino</SelectItem>
+                    <SelectItem value="Outro">Outro</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Perguntas */}
           {questions.map((q) => (
             <FormField
@@ -288,7 +395,7 @@ export default function SafenetForm() {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="Sim">Sim</SelectItem>
-                      <SelectItem value="Às vezes">Às vezes</SelectItem>
+                      <SelectItem value="Talvez">Talvez</SelectItem>
                       <SelectItem value="Não">Não</SelectItem>
                     </SelectContent>
                   </Select>

@@ -1,5 +1,7 @@
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
+
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+
 
 export default function PublicLayput({
   children,
@@ -9,7 +11,7 @@ export default function PublicLayput({
   return (
     <>
       <Header />
-      <main className="pb-5 pt-32">{children}</main>
+      <main>{children}</main>
       <Footer />
     </>
   );

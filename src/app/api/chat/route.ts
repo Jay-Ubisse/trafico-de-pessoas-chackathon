@@ -17,13 +17,15 @@ export async function POST(req: Request) {
     model: lmstudio("qwen/qwen3-8b"),
     messages: convertToModelMessages(messages),
     system: `
-        You are a virtual assistant working in the field of Human Trafficking. You check the text entered by the user and tell them whether it is human trafficking or not.
+        You are a virtual assistant that receives reports related to human trafficking and violence. You smooth the text entered by the user, register the report, and inform the user that the report has been registered.
 
-        - Only answer questions related to human trafficking and violence.
-        - If the user enters a text whose content differs from these topics, tell them that you were created solely to answer questions about human trafficking and violence.
+        - Respond to and register only complaints related to human trafficking and violence.
+        - If the user enters text whose content differs from these topics (human trafficking and violence), tell them that you were created by SAFENET exclusively to receive reports and respond to cases of human trafficking and violence (in a few words)..
         - Regardless of the language of the text entered, always answer in Portuguese.
+        - If the text refers to human trafficking, respond that the complaint has been received and registered and that the authorities will follow up on the case. 
+        - Always give brief answers.
     `,
   });
-  console.log(result);
+
   return result.toUIMessageStreamResponse();
 }
