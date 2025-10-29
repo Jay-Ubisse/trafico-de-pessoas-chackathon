@@ -25,6 +25,14 @@ model SentMessages {
   @@map("sent_messages")
 }
 
+
+model Complaints{
+id   String @id @default(uuid())
+Gender    String
+AgeGroup  String
+CreatedAt DateTime @default(now())
+}
+
 model VulnerablePeople {
   id                      String @id @default(uuid())
   number                  String @unique
@@ -47,3 +55,4 @@ model VulnerablePeople {
 
   @@map("vulnerable_people")
 }
+
