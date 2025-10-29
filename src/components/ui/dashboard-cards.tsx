@@ -1,11 +1,42 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
 
 const cards = [
-  { title: "Total Denúncias", value: "12,500", description: "Últimos 30 dias", trend: "+12%", color: "text-green-600" },
-  { title: "Total Vulnerávis", value: "1,234", description: "Crescimento semanal", trend: "-5%", color: "text-red-600" },
-  { title: "Vulnerávis Sexo Masculino", value: "45,678", description: "Usuários ativos hoje", trend: "+3%", color: "text-green-600" },
-  { title: "Vulnerávis Sexo Masculino", value: "4.5%", description: "Média mensal", trend: "Estável", color: "text-green-600" },
-]
+  {
+    title: "Total Denúncias",
+    value: "12,500",
+    description: "Últimos 30 dias",
+    trend: "+12%",
+    color: "text-green-600",
+  },
+  {
+    title: "Total Vulnerávis",
+    value: "1,234",
+    description: "Crescimento semanal",
+    trend: "-5%",
+    color: "text-red-600",
+  },
+  {
+    title: "Vulnerávis Sexo Masculino",
+    value: "45,678",
+    description: "Usuários ativos hoje",
+    trend: "+3%",
+    color: "text-green-600",
+  },
+  {
+    title: "Vulnerávis Sexo Masculino",
+    value: "4.5%",
+    description: "Média mensal",
+    trend: "Estável",
+    color: "text-green-600",
+  },
+];
 
 export function DashboardCards() {
   return (
@@ -13,7 +44,9 @@ export function DashboardCards() {
       {cards.map((card) => (
         <Card key={card.title}>
           <CardHeader>
-            <CardDescription>{card.title}</CardDescription>
+            <CardDescription className="font-medium">
+              {card.title}
+            </CardDescription>
             <CardTitle>{card.value}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -25,5 +58,5 @@ export function DashboardCards() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
