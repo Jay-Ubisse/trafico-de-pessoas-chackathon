@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Menu, X, Shield, Phone } from "lucide-react";
 import Link from "next/link";
 
-export default function Header() {
+export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
