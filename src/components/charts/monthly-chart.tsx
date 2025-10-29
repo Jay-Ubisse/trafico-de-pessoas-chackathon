@@ -1,23 +1,33 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
+import * as React from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { dataByYear } from "@/data/monthly-data" // ajuste o caminho
-
+} from "@/components/ui/chart";
+import { dataByYear } from "@/data/monthly-data"; // ajuste o caminho
 
 interface MonthlyChartProps {
-  year: keyof typeof dataByYear
+  year: keyof typeof dataByYear;
 }
 
 export function MonthlyChart({ year }: MonthlyChartProps) {
   return (
     <div className="flex flex-col gap-4">
+      <h2 className="text-lg font-semibold mb-4">
+        Número de denúncias por mês
+      </h2>
       <ChartContainer config={{}} className="min-h-[300px] w-full">
         <BarChart data={dataByYear[year]}>
           <CartesianGrid vertical={false} />
@@ -30,14 +40,9 @@ export function MonthlyChart({ year }: MonthlyChartProps) {
           />
           <YAxis tickLine={false} axisLine={false} tickMargin={8} />
           <Tooltip content={<ChartTooltipContent />} />
-          <Bar
-            dataKey="denuncias"
-            fill="#2563eb"
-            radius={[4, 4, 0, 0]}
-          />
+          <Bar dataKey="denuncias" fill="#2563eb" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ChartContainer>
     </div>
-  )
+  );
 }
-
