@@ -24,3 +24,10 @@ model SentMessages {
 
   @@map("sent_messages")
 }
+
+model Complaints{
+id   String @id @default(uuid())
+Gender    String
+AgeGroup  String
+CreatedAt DateTime @default(now())
+}
