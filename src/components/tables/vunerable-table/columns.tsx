@@ -14,9 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { VulnerablePeopleProps } from "@/types/vulnerable-people";
+import { VulnerablePersonProps } from "@/types/vulnerable-people";
+import {
+  vulnerabilityLevelStyles,
+  vulnerabilityScoreStyles,
+} from "@/lib/helper-fuctions";
 
-export const columns: ColumnDef<VulnerablePeopleProps>[] = [
+export const columns: ColumnDef<VulnerablePersonProps>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -40,13 +44,121 @@ export const columns: ColumnDef<VulnerablePeopleProps>[] = [
     header: "Género",
   },
   {
+    accessorKey: "ageGroup",
+    header: "Faixa etária",
+  },
+  {
     accessorKey: "location",
     header: "Local",
   },
   {
-    accessorKey: "sentAt",
-    header: "Data de envio",
-    cell: ({ row }) => format(row.original.sentAt!, "dd/MM/yyyy"),
+    accessorKey: "organTraffickingScore",
+    header: "Tráfico de órgãos",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.organTraffickingScore
+        )}`}
+      >
+        {row.original.organTraffickingScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "sexualExploitationScore",
+    header: "Exploração sexual",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.sexualExploitationScore
+        )}`}
+      >
+        {row.original.sexualExploitationScore.toFixed(2)}
+      </span>
+    ),
+  },
+
+  {
+    accessorKey: "domesticServitudeScore",
+    header: "Serviço doméstico",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.sexualExploitationScore
+        )}`}
+      >
+        {row.original.sexualExploitationScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "drugsCoercionScore",
+    header: "Drogas/Coerção",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.drugsCoercionScore
+        )}`}
+      >
+        {row.original.drugsCoercionScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "forcedLaborScore",
+    header: "Trabalho forçado",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.forcedLaborScore
+        )}`}
+      >
+        {row.original.forcedLaborScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "fraudDeceptionScore",
+    header: "Fraude/Engano",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.fraudDeceptionScore
+        )}`}
+      >
+        {row.original.fraudDeceptionScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "childTraffickingScore",
+    header: "Tráfico de crianças",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityScoreStyles(
+          row.original.childTraffickingScore
+        )}`}
+      >
+        {row.original.childTraffickingScore.toFixed(2)}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "vulnerabilityType",
+    header: "Maior vulnerabilidade",
+  },
+  {
+    accessorKey: "vulnerabilityLevel",
+    header: "Nível total de Vulnerabilidade",
+    cell: ({ row }) => (
+      <span
+        className={`px-2 py-1 rounded-md text-white font-medium ${vulnerabilityLevelStyles(
+          row.original.vulnerabilityLevel
+        )}`}
+      >
+        {row.original.vulnerabilityLevel}
+      </span>
+    ),
   },
   {
     id: "Acções",

@@ -68,20 +68,32 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filtrar nome..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+          placeholder="Filtrar maior vulnerabilidade..."
+          value={
+            (table
+              .getColumn("vulnerabilityType")
+              ?.getFilterValue() as string) ?? ""
           }
-          className="max-w-52 mr-2"
+          onChange={(event) =>
+            table
+              .getColumn("vulnerabilityType")
+              ?.setFilterValue(event.target.value)
+          }
+          className="max-w-64 mr-2"
         />
         <Input
-          placeholder="Filtrar número..."
-          value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("number")?.setFilterValue(event.target.value)
+          placeholder="Filtrar nível de vulnerabilidade..."
+          value={
+            (table
+              .getColumn("vulnerabilityLevel")
+              ?.getFilterValue() as string) ?? ""
           }
-          className="max-w-52"
+          onChange={(event) =>
+            table
+              .getColumn("vulnerabilityLevel")
+              ?.setFilterValue(event.target.value)
+          }
+          className="max-w-64"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -29,7 +29,7 @@ model VulnerablePeople {
   id                      String @id @default(uuid())
   number                  String @unique
   name                    String
-  ageGroup                Int
+  ageGroup                String
   gender                  String
   location                String
   childTraffickingScore   Float

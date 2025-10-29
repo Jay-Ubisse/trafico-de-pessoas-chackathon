@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { VulnerablePeopleProps } from "@/types/vulnerable-people";
 import prisma from "@/lib/db";
 import { vulnerablePeopleSchema } from "@/schemas/vulnerables";
 
 export async function GET() {
   try {
-    const vulnerable = await prisma.vulnerablePeople.findMany();
-    return NextResponse.json({ message: "ok", vulnerable }, { status: 200 });
+    const vulnerables = await prisma.vulnerablePeople.findMany();
+
+    return NextResponse.json({ message: "ok", vulnerables }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
-        message: "Pessoa vulnerável cadastrada com sucesso",
+        message: "Formulário submetido com sucesso.",
         vulnerablePerson,
       },
       { status: 201 }

@@ -1,8 +1,8 @@
-export interface VulnerablePeopleProps {
+export interface VulnerablePersonProps {
   id?: string;
   number: string;
   name: string;
-  ageGroup: number;
+  ageGroup: string;
   gender: string;
   location: string;
   childTraffickingScore: number;

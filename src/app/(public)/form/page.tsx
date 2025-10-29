@@ -20,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
+import { registerVulnerablePerson } from "@/services/vulnerable";
 
 // ------------------ SCHEMA ------------------
 const formSchema = z.object({
@@ -251,10 +253,37 @@ export default function SafenetForm() {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((values) => {
+          onSubmit={form.handleSubmit(async (values) => {
             const result = processFormData(values);
-            console.log("Respostas:", values);
-            console.log("Resultado JSON:", result);
+            toast.loading("A submeter formulário....");
+            const response = await registerVulnerablePerson({
+              data: {
+                ageGroup: result.ageGroup,
+                childTraffickingScore: result.scoreBreakdown.Trfico_de_Crianas,
+                domesticServitudeScore: result.scoreBreakdown.Servido_Domstica,
+                drugsCoercionScore: result.scoreBreakdown.DrogasCoero,
+                forcedLaborScore: result.scoreBreakdown.Trabalho_Forado,
+                fraudDeceptionScore: result.scoreBreakdown.Trabalho_Forado,
+                gender: result.gender,
+                location: result.location,
+                name: result.name,
+                number: result.number,
+                organTraffickingScore: result.scoreBreakdown.Trfico_de_rgos,
+                sexualExploitationScore: result.scoreBreakdown.Explorao_Sexual,
+                totalVulnerabilityScore: result.totalVulnerabilityPct,
+                vulnerabilityLevel: result.vulnerabilityLeve,
+                vulnerabilityType: result.vulnerabilityType,
+              },
+            });
+
+            if (response?.status === 201) {
+              toast.dismiss();
+              toast.success(response.data.message);
+              form.reset();
+            } else {
+              toast.dismiss();
+              toast.error(response.data.message);
+            }
           })}
           className="space-y-6"
         >
