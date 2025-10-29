@@ -1,7 +1,9 @@
+import { AllComplaintsTable } from "@/components/tables/complaints-table";
+
 export default function Complaints() {
   return (
     <div>
-      <p>Denúncias</p>
+      <AllComplaintsTable />
     </div>
   );
 }

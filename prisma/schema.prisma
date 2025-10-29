@@ -25,12 +25,26 @@ model SentMessages {
   @@map("sent_messages")
 }
 
+model Complaints {
+  id        String   @id @default(uuid())
+  name      String?
+  means     String
+  purpose   String
+  number    String?
+  location  String
+  action    String
+  gender    String
+  ageGroup  String
+  status    Status   @default(Em_Curso)
+  createdAt DateTime @default(now())
 
-model Complaints{
-id   String @id @default(uuid())
-Gender    String
-AgeGroup  String
-CreatedAt DateTime @default(now())
+  @@map("complaints")
+}
+
+enum Status {
+  Em_Curso
+  Resolvido
+  Não_Resolvido
 }
 
 model VulnerablePeople {
@@ -55,4 +69,3 @@ model VulnerablePeople {
 
   @@map("vulnerable_people")
 }
-

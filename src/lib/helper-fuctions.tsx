@@ -1,3 +1,5 @@
+import { ComplaintStatus } from "@/types/complaints";
+
 export function vulnerabilityScoreStyles(score: number): string {
   if (score < 21) {
     return "bg-green-500";
@@ -22,5 +24,16 @@ export function vulnerabilityLevelStyles(level: string): string {
       return "bg-red-500";
     default:
       return "";
+  }
+}
+
+export function complaintText(complaint: ComplaintStatus): string {
+  switch (complaint) {
+    case "Em_Curso":
+      return "Em curso";
+    case "Não_Resolvido":
+      return "Não resolvido";
+    default:
+      return "Resolvido";
   }
 }
