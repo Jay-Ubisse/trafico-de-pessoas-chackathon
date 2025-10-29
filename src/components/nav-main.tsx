@@ -1,9 +1,15 @@
 "use client";
 
 import { type LucideIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-import {} from "@/components/ui/collapsible";
-import { SidebarGroup, SidebarMenu } from "@/components/ui/sidebar";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import Link from "next/link";
 
 export function NavMain({
@@ -20,23 +26,31 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const path = usePathname();
+
   return (
     <SidebarGroup>
-      <SidebarMenu>
-        <ul className="text-base flex flex-col gap-4 pl-4 mt-5">
+      <SidebarGroupContent>
+        <SidebarMenu className="space-y-2 pl-2 mt-4">
           {items.map((item) => (
-            <div className="flex items-center" key={item.title}>
-              {item.icon && <item.icon />}
-              <Link
-                href={item.url}
-                className="rounded-md hover:bg-gray-200 px-2 py-1"
-              >
-                {item.title}
+            <SidebarMenuItem key={item.title}>
+              <Link href={item.url}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  className={`${
+                    path.includes(item.url)
+                      ? "bg-[#2563EB] text-white"
+                      : "bg-transparent"
+                  } text-base hover:bg-[#2563EB] hover:text-white`}
+                >
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
               </Link>
-            </div>
+            </SidebarMenuItem>
           ))}
-        </ul>
-      </SidebarMenu>
+        </SidebarMenu>
+      </SidebarGroupContent>
     </SidebarGroup>
   );
 }

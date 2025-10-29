@@ -1,6 +1,5 @@
 "use client";
 
-import { getAllMessages } from "@/services/messages";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { DataTable } from "./data-table";
