@@ -9,7 +9,7 @@ export default function PublicLayput({
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main className="pb-5 pt-32">{children}</main>
       <Footer />
     </>
   );
