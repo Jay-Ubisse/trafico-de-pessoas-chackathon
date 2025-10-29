@@ -246,7 +246,7 @@ export default function SafenetForm() {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-2xl">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-2xl mt-28">
       <h2 className="text-2xl font-semibold mb-6 text-center">
         Formulário de Candidatura — Programa de Emprego
       </h2>

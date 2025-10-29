@@ -10,28 +10,28 @@ import {
 const cards = [
   {
     title: "Total Denúncias",
-    value: "12,500",
+    value: "1,248",
     description: "Últimos 30 dias",
     trend: "+12%",
     color: "text-green-600",
   },
   {
     title: "Total Vulnerávis",
-    value: "1,234",
+    value: "834",
     description: "Crescimento semanal",
     trend: "-5%",
     color: "text-red-600",
   },
   {
     title: "Vulnerávis Sexo Masculino",
-    value: "45,678",
+    value: "278",
     description: "Usuários ativos hoje",
     trend: "+3%",
     color: "text-green-600",
   },
   {
-    title: "Vulnerávis Sexo Masculino",
-    value: "4.5%",
+    title: "Vulnerávis Sexo Feminino",
+    value: "566",
     description: "Média mensal",
     trend: "Estável",
     color: "text-green-600",
