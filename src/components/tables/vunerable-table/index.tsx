@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
-export function AllVulnerableTable() {
+export function VulnerableTable() {
   const { data, isPending, error } = useQuery({
     queryKey: ["all-vulnerable"],
     queryFn: () => getAllVulnerable(),

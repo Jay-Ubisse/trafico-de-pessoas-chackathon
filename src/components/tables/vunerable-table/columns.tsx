@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { VulnerablePeopleProps } from "@/types/vulnerablePeople";
+import { VulnerablePeopleProps } from "@/types/vulnerable-people";
 
 export const columns: ColumnDef<VulnerablePeopleProps>[] = [
   {
@@ -25,7 +25,7 @@ export const columns: ColumnDef<VulnerablePeopleProps>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nome do Vulneravel
+          Nome do Vulnerável
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -34,6 +34,14 @@ export const columns: ColumnDef<VulnerablePeopleProps>[] = [
   {
     accessorKey: "number",
     header: "Número",
+  },
+  {
+    accessorKey: "gender",
+    header: "Género",
+  },
+  {
+    accessorKey: "location",
+    header: "Local",
   },
   {
     accessorKey: "sentAt",

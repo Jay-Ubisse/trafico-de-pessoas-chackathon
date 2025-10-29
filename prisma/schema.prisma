@@ -26,25 +26,24 @@ model SentMessages {
 }
 
 model VulnerablePeople {
-  id                          String   @id @default(uuid())
-  number                      String   @unique
-  name                        String
-  ageGroup                    Int
-  vulnerable                  String
-  message                     String   @db.Text
-  sentAt                      DateTime @default(now())
-  gender                      String
-  location                String 
-  childTraffickingScore       Float
-  domesticServitudeScore      Float
-  drugsCoercionScore          Float
-  forcedLaborScore            Float
-  fraudDeceptionScore         Float
-  organTraffickingScore       Float
-  sexualExploitationScore     Float
-  totalVulnerabilityScore     Float
-  vulnerabilityLevel          String
-  vulnerabilityType           String
+  id                      String @id @default(uuid())
+  number                  String @unique
+  name                    String
+  ageGroup                Int
+  gender                  String
+  location                String
+  childTraffickingScore   Float
+  domesticServitudeScore  Float
+  drugsCoercionScore      Float
+  forcedLaborScore        Float
+  fraudDeceptionScore     Float
+  organTraffickingScore   Float
+  sexualExploitationScore Float
+  totalVulnerabilityScore Float
+  vulnerabilityLevel      String
+  vulnerabilityType       String
+
+  createdAt DateTime @default(now())
 
   @@map("vulnerable_people")
 }

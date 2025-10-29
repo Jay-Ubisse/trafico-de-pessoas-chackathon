@@ -1,17 +1,8 @@
-export enum vulnerabilityLevel {
-  Baixo = 'Baixo',
-  Medio = 'Medio',
-  Alto = 'Alto'
-}
-
-
 export interface VulnerablePeopleProps {
   id?: string;
   number: string;
   name: string;
   ageGroup: number;
-  vulnerable: string;
-  message: string;
   gender: string;
   location: string;
   childTraffickingScore: number;
@@ -24,5 +15,5 @@ export interface VulnerablePeopleProps {
   totalVulnerabilityScore: number;
   vulnerabilityLevel: string;
   vulnerabilityType: string;
-  sentAt?: Date;
+  createdAt?: Date | string;
 }
