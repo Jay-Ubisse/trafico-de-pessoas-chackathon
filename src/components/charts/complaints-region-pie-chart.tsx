@@ -1,20 +1,12 @@
 "use client"
 
+import React from "react"
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { getRegionByYear, RegionDenuncia } from "@/data/complaintsRegionByYear"
 
-const chartData = [
-  { name: "Maputo Cidade", value: 420 },
-  { name: "Maputo Província", value: 380 },
-  { name: "Gaza", value: 210 },
-  { name: "Inhambane", value: 180 },
-  { name: "Manica", value: 160 },
-  { name: "Sofala", value: 190 },
-  { name: "Tete", value: 220 },
-  { name: "Zambézia", value: 310 },
-  { name: "Nampula", value: 400 },
-  { name: "Niassa", value: 150 },
-  { name: "Cabo Delgado", value: 240 },
-]
+interface ComplaintsRegionPieChartProps {
+  year: number
+}
 
 const COLORS = [
   "#2563eb",
@@ -30,11 +22,13 @@ const COLORS = [
   "#6b7280",
 ]
 
-export function ComplaintsRegionPieChart() {
+export const ComplaintsRegionPieChart: React.FC<ComplaintsRegionPieChartProps> = ({ year }) => {
+  const chartData: RegionDenuncia[] = getRegionByYear(year)
+
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[350px]">
-      <h2 className="text-lg font-semibold mb-4">Denúncias por Região (Pizza)</h2>
-      <ResponsiveContainer width="100%" height={350}>
+    <div className="flex flex-col items-center justify-center w-full py-6">
+      <h2 className="text-lg font-semibold mb-6">Denúncias por Região — {year}</h2>
+      <ResponsiveContainer width="100%" height={400}>
         <PieChart>
           <Pie
             data={chartData}
@@ -43,16 +37,20 @@ export function ComplaintsRegionPieChart() {
             cx="50%"
             cy="50%"
             outerRadius={120}
-            label={({ name, percent }) =>
-              `${name}: ${(percent * 100).toFixed(1)}%`
-            }
+            label={(entry: any) => `${entry.name}: ${((entry.value / chartData.reduce((acc, cur) => acc + cur.value, 0)) * 100).toFixed(1)}%`}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip formatter={(value) => `${value} denúncias`} />
-          <Legend />
+          <Tooltip formatter={(value: number) => `${value} denúncias`} />
+          <Legend
+            verticalAlign="bottom"
+            wrapperStyle={{
+              marginTop: 20,
+              fontSize: 12,
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
